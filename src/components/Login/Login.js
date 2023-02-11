@@ -41,6 +41,9 @@ const Login = (props) => {
     isValid: null,
   });
 
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
   };
@@ -59,20 +62,18 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState, passwordState);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   useEffect(() => {
     const clear = setTimeout(() => {
-      setFormIsValid(
-        emailState.value.includes("@") && passwordState.value.trim().length > 6
-      );
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500);
 
     return () => {
       clearTimeout(clear);
     };
-  }, [emailState, passwordState]);
+  }, [emailIsValid, passwordIsValid]);
 
   return (
     <Card className={classes.login}>
